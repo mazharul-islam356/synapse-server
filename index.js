@@ -8,22 +8,14 @@ const cors= require('cors')
 app.use(cors());
 app.use(express.json());
 
-// a4ps9Fl5MCD3GoLv
-
-
-
-
-
-
-app.get('/',(req,res) => {
-    res.send('Ulumul quran server is running')
-})
+// mazharulislamrifat46
+// APscn58b0afoSr3X
 
 
 
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://techhome098:a4ps9Fl5MCD3GoLv@cluster0.wn1ohul.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://mazharulislamrifat46:APscn58b0afoSr3X@ulumulquran.vpbfnff.mongodb.net/?retryWrites=true&w=majority&appName=ulumulQuran";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -39,15 +31,17 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    app.post('/addBlog',(req,res)=>{
-      req.send(body.json)
+    const database = client.db("blogsDB");
+    const dataCollection = database.collection("blogData");
+
+
+    app.post('/users', async(req,res)=>{
+      const user = req.body;
+      console.log( 'blog data:', user);
+      const result = await dataCollection.insertOne(user);
+      res.send(result)
+      
     })
-
-
-
-
-
-
 
 
 
@@ -56,10 +50,21 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
+
+
+
+app.get('/',(req,res) => {
+    res.send('Ulumul quran server is running')
+})
+
+
+
+
+
 
 
 
