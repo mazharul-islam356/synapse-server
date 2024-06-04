@@ -43,6 +43,13 @@ async function run() {
       
     })
 
+    app.get('/users', async(req,res) => {
+      
+      const data = dataCollection.find();
+      const result = await data.toArray();
+      res.send(result)
+    })
+
 
 
     // Send a ping to confirm a successful connection
