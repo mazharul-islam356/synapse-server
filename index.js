@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://mazharulislamrifat46:APscn58b0afoSr3X@ulumulquran.vpbfnff.mongodb.net/?retryWrites=true&w=majority&appName=ulumulQuran";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -31,11 +31,44 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const database = client.db("blogsDB");
-    const dataCollection = database.collection("blogData");
+    const dataCollection = client.db("blogsDB").collection("blogData");
+    const usersCollection = client.db("usersDB").collection("usersData");
+    
 
 
-    app.post('/users', async(req,res)=>{
+    // users related api
+
+    app.get('/users', async(req,res)=>{
+      const result = await usersCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.post('/users', async (req,res)=>{
+      const user = req.body;
+      // insert email if user dose not exists
+      const query = {email : user.email}
+      const existingUser = await usersCollection.findOne(query)
+      if(existingUser){
+        return res.send({message: 'user already exists', insertedId: null})
+      }
+      const result = await usersCollection.insertOne(user)
+      res.send(result)
+    })
+
+    app.delete('/users/:id', async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await usersCollection.deleteOne(query)
+      res.send(result)
+    }
+    )
+
+   
+     
+
+
+    // blog related api
+    app.post('/addBlog', async(req,res)=>{
       const user = req.body;
       console.log( 'blog data:', user);
       const result = await dataCollection.insertOne(user);
@@ -43,7 +76,7 @@ async function run() {
       
     })
 
-    app.get('/users', async(req,res) => {
+    app.get('/addBlog', async(req,res) => {
       
       const data = dataCollection.find();
       const result = await data.toArray();
