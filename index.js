@@ -1,16 +1,18 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5001;
-const cors= require('cors')
+const cors= require('cors');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 // middleware
 app.use(cors());
 app.use(express.json());
 
+
+
 // mazharulislamrifat46
 // APscn58b0afoSr3X
-
 
 
 
@@ -39,7 +41,9 @@ async function run() {
     // jwt related api
     app.post('/jwt', (req,res) => {
       const user = req.body;
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1h'});
+      console.log('user for token', user);
+      console.log(process.env.JWT_SECRET);
+      const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1h'});
       res.send({token}) 
     })
 
