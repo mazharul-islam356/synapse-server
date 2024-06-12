@@ -35,6 +35,7 @@ async function run() {
 
     const dataCollection = client.db("blogsDB").collection("blogData");
     const usersCollection = client.db("usersDB").collection("usersData");
+    const qustionCollection = client.db("qustionDB").collection("qustionData");
     
 
 
@@ -152,6 +153,23 @@ async function run() {
       
       const data = dataCollection.find();
       const result = await data.toArray();
+      res.send(result)
+    })
+
+
+
+
+    // qustion related api
+    app.post('/qustion', async(req,res)=>{
+      const qustion = req.body;
+      const status = ['pending']
+      const result = await qustionCollection.insertOne(qustion,status);
+      res.send(result)
+    })
+
+    app.get('/qustion', async(req,res) => {
+      const qustion = qustionCollection.find();
+      const result = await qustion.toArray();
       res.send(result)
     })
 
