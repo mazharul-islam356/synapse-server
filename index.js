@@ -149,6 +149,8 @@ async function run() {
       
     })
 
+    
+
     app.get('/addBlog', async(req,res) => {
       
       const data = dataCollection.find();
@@ -156,7 +158,41 @@ async function run() {
       res.send(result)
     })
 
+    app.delete('/addBlog/:id', verifyToken, verifyAdmin, async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await dataCollection.deleteOne(query)
+      res.send(result)
+    }
+    )
 
+// update
+    app.put('/addBlog/:id', async (req,res)=> {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId (id)}
+      const options = {upsert: true}
+      const updatedBlog = req.body;
+      const blog = {
+        $set:{
+          title: updatedBlog.title,
+          writer: updatedBlog.writer,
+          blog: updatedBlog.blog,
+          category: updatedBlog.category,
+          photo: updatedBlog.photo,
+          
+        }
+      }
+      const result = await dataCollection.updateOne(filter,blog,options)
+      res.send(result)
+    })
+
+
+    app.get('/addBlog/:id', async(req,res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await dataCollection.findOne(query);
+      res.send(result)
+    })
 
 
     // qustion related api
