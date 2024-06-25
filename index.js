@@ -186,6 +186,18 @@ async function run() {
       res.send(result)
     })
 
+    // dynamic form
+
+    app.post('/dynamicFrom', async (req, res) => {
+      const values = req.body.values;
+      try {
+        await dataCollection.insertOne({ values });
+        res.status(200).send('Data saved successfully');
+      } catch (error) {
+        console.error('Error saving data', error);
+        res.status(500).send('Error saving data');
+      }
+    })
 
     app.get('/addBlog/:id', async(req,res) => {
       const id = req.params.id;
