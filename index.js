@@ -34,8 +34,12 @@ async function run() {
     await client.connect();
 
     const dataCollection = client.db("blogsDB").collection("blogData");
+
     const usersCollection = client.db("usersDB").collection("usersData");
+
     const qustionCollection = client.db("qustionDB").collection("qustionData");
+
+    const qustionAporoveCollection = client.db("qustionDB").collection("approvedQustionData");
     
 
 
@@ -207,19 +211,46 @@ async function run() {
     })
 
 
+
     // qustion related api
     app.post('/qustion', async(req,res)=>{
       const qustion = req.body;
-      const status = ['pending']
-      const result = await qustionCollection.insertOne(qustion,status);
+      // const status = 'pending'
+      const result = await qustionCollection.insertOne(qustion);
       res.send(result)
     })
 
-    app.get('/qustion', async(req,res) => {
-      const qustion = qustionCollection.find();
+
+    app.get('/pendingQustion', async(req,res) => {
+      const query = {
+        status: 'pending'
+      }
+      const qustions = req.body
+      const qustion = qustionCollection.find(qustions);
       const result = await qustion.toArray();
       res.send(result)
     })
+
+    app.patch('/qustions/:id', async(req,res)=>{
+      const filter = {_id: req.params.id}
+      const updateDoc  = {
+        $set: {
+          status: req.body.status
+        }
+      }
+
+      const result = await qustionCollection.updateOne(filter,updateDoc)
+      res.send(result)
+
+    })
+
+    // approve and reject
+    app.post('/approve', async(req,res)=>{
+      const approveQ = req.body
+      const result = await qustionAporoveCollection.insertOne(approveQ)
+      res.send(result)
+    })
+  
 
 
 
@@ -238,9 +269,6 @@ run().catch(console.dir);
 app.get('/',(req,res) => {
     res.send('Ulumul quran server is running')
 })
-
-
-
 
 
 
