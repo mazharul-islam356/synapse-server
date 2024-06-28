@@ -220,6 +220,14 @@ async function run() {
       res.send(result)
     })
 
+    app.delete('/qustion/:id', verifyToken, verifyAdmin, async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await qustionCollection.deleteOne(query)
+      res.send(result)
+    }
+    )
+
 
     app.get('/pendingQustion', async(req,res) => {
       const query = {
@@ -245,11 +253,19 @@ async function run() {
     })
 
     // approve and reject
-    app.post('/approve', async(req,res)=>{
+    app.post('/approve/:id', async(req,res)=>{
       const approveQ = req.body
       const result = await qustionAporoveCollection.insertOne(approveQ)
       res.send(result)
     })
+
+    app.delete('/approve/:id', verifyToken, verifyAdmin, async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await qustionCollection.deleteOne(query)
+      res.send(result)
+    }
+    )
   
 
 
