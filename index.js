@@ -229,16 +229,14 @@ async function run() {
     )
 
 
-    app.get('/pendingQustion', async(req,res) => {
-      const query = {
-        status: 'pending'
-      }
+    app.get('/qustion', async(req,res) => {
       const qustions = req.body
       const qustion = qustionCollection.find(qustions);
       const result = await qustion.toArray();
       res.send(result)
     })
 
+    
     app.patch('/qustions/:id', async(req,res)=>{
       const filter = {_id: req.params.id}
       const updateDoc  = {
@@ -256,6 +254,13 @@ async function run() {
     app.post('/approve/:id', async(req,res)=>{
       const approveQ = req.body
       const result = await qustionAporoveCollection.insertOne(approveQ)
+      res.send(result)
+    })
+
+    app.get('/approve', async(req,res) => {
+      const approveQ = req.body
+      const qustion = qustionAporoveCollection.find(approveQ);
+      const result = await qustion.toArray();
       res.send(result)
     })
 
