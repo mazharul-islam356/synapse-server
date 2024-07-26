@@ -143,7 +143,6 @@ async function run() {
     }
     )
 
-
     // blog related api
     app.post('/addBlog', async(req,res)=>{
       const user = req.body;
