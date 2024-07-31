@@ -1,13 +1,44 @@
 const express = require('express');
+const twilio = require('twilio');
 const app = express();
 const port = process.env.PORT || 5001;
 const cors= require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+
+
 // middleware
 app.use(cors());
 app.use(express.json());
+
+// sms send twilio
+const accountSid = 'AC16036458de2bb351a7f42fac51ef2d21';
+const authToken = 'd6074c0fc00e51a52dc4cf3957a35613';
+const client2 = twilio(accountSid, authToken);
+
+
+
+app.post('/send-sms', async (req, res) => {
+  const { numbers, message } = req.body;
+
+  try {
+    const numberArray = numbers.split(',').map(num => num.trim());
+
+    for (const number of numberArray) {
+      await client2.messages.create({
+        body: message,
+        from: '+12294584388',
+        to: number
+      });
+    }
+
+    res.json({ message: 'SMS sent successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to send SMS' });
+  }
+});
 
 
 
