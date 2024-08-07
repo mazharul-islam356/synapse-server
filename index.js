@@ -19,17 +19,17 @@ const client2 = twilio(accountSid, authToken);
 
 
 
-app.post('/send-sms', async (req, res) => {
+app.post('/smsSend', async (req, res) => {
   const { numbers, message } = req.body;
 
   try {
     const numberArray = numbers.split(',').map(num => num.trim());
 
-    for (const number of numberArray) {
+    for (const numbers of numberArray) {
       await client2.messages.create({
         body: message,
         from: '+12294584388',
-        to: number
+        to: numbers
       });
     }
 
