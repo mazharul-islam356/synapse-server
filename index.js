@@ -39,11 +39,8 @@ app.post('/smsSend', async (req, res) => {
   }
 });
 
-
-
 // mazharulislamrifat46
 // APscn58b0afoSr3X
-
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
