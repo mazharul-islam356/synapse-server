@@ -42,7 +42,6 @@ app.post('/smsSend', async (req, res) => {
 // mazharulislamrifat46
 // APscn58b0afoSr3X
 
-
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://mazharulislamrifat46:APscn58b0afoSr3X@ulumulquran.vpbfnff.mongodb.net/?retryWrites=true&w=majority&appName=ulumulQuran";
 
